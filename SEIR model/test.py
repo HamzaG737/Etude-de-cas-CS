@@ -18,6 +18,7 @@ e_pop =[]
 i_pop =[]
 r_pop =[]
 
+#initial values
 s_pop.append(N-I0)
 e_pop.append(I0)
 i_pop.append(0)
