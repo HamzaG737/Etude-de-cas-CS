@@ -7,48 +7,51 @@ import pandas as pd
 
 # opening the original files
 
-def from_text_to_csv(in_path):
+def from_text_to_csv(in_path, out_path):
     # simple functions which turns a space separated text file into a csv
-    out_path = ''
-    txt_file = open(in_path)
-    out_file = open(out_path)
+    txt_file = open(in_path, 'r')
+    out_file = open(out_path, 'w')
+    txt_file.readline()
     for line in txt_file:
-        (id, polarity) = line.strip().split(' ')
-        out_file.write(','.join([id, polarity]) + '\n')
+        (id, el) = line.strip().split('\t')
+        out_file.write(','.join([id, el]) + '\n')
     txt_file.close()
     out_file.close()
 
 
 
-"""polarity = open('Data/Train_References-22042015/Train_References/T1.txt', 'r')
-polarity_csv = open('Data/Train_References-22042015/Train_References/T1.csv', 'w')
+polarity = open('Data/labelled_data/Test_References/T1.txt', 'r')
+polarity_csv = open('Data/labelled_data/Test_References/test_polarity.csv', 'w')
 polarity.readline() # skip first line
 for line in polarity:
     (id, pol) = line.strip().split('\t')
     polarity_csv.write(','.join([id, pol]) + '\n')
 polarity.close()
-polarity_csv.close()"""
+polarity_csv.close()
 
 #polarity = pd.read_csv('Data/Train_References-22042015/Train_References/T1.csv')
 #print(polarity)
 
-"""nature = open('Data/Train_References-22042015/Train_References/T2.1.txt', 'r')
-nature_csv = open('Data/Train_References-22042015/Train_References/nature_tweets.csv', 'w')
+nature = open('Data/labelled_data/Test_References/test_nature.txt', 'r')
+nature_csv = open('Data/labelled_data/Test_References/test_nature.csv', 'w')
 nature.readline() # skip first line
 for line in nature:
-    (id, nat) = line.strip().split(' ')
+    print(line.strip().split('\t'))
+    (id, nat) = line.strip().split('\t')
     nature_csv.write(','.join([id, nat]) + '\n')
 nature.close()
-nature_csv.close()"""
+nature_csv.close()
 
-polarity = pd.read_csv('Data/Train_References-22042015/Train_References/T1.csv')
+
+from_text_to_csv('Data/labelled_data/Test_References/test_emotion.txt', 'Data/labelled_data/Test_References/test_emotion.csv')
+
+polarity = pd.read_csv('Data/labelled_data/Test_References/test_polarity.csv')
 print(polarity)
 
-
-nature = pd.read_csv('Data/Train_References-22042015/Train_References/nature_tweets.csv')
+nature = pd.read_csv('Data/labelled_data/Test_References/test_nature.csv')
 print(nature)
 
-emotion = pd.read_csv('Data/Train_References-22042015/Train_References/emotion_tweets.csv')
+emotion = pd.read_csv('Data/labelled_data/Test_References/test_emotion.csv')
 print(emotion)
 
 """data_list = []
@@ -68,7 +71,7 @@ all_data = pd.merge(polarity, nature, how='outer', on='id')
 all_data = pd.merge(all_data, emotion, how='outer', on='id')
 print(all_data)
 
-all_data.to_csv('labelled_train_data.csv')
+all_data.to_csv('labelled_test_data.csv')
 
 
 
