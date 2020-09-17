@@ -36,6 +36,8 @@ class SEIR :
         self.modelRun = False
 
     def init(self,t0=0, steps=100, Susceptible=950, Exposed = 100, Infected=50, Resistant=0, rateSI=beta, rateIR=gamma, rateEI = sigma):
+        print(t0, steps,R0)
+
         self.t0 = t0
         self.steps = steps
         self.Susceptible = Susceptible
@@ -55,6 +57,7 @@ class SEIR :
         Infected = [self.Infected]
         Resistant = [self.Resistant]
         time = list(range(self.t0,self.t0+self.steps))
+        print("beta",self.rateSI)
 
         for step in range(self.t0+1, self.t0 + self.steps):
             S_to_E = (self.rateSI * Susceptible[-1] * Infected[-1]) / self.numIndividuals
@@ -114,30 +117,59 @@ class SEIR :
         plt.title(title, fontsize = 20)
 
 
-epochs = 58
+times = [1,59,69,79,120]
+R0_list = [3.25,2,1,0.6]
 seir_model = SEIR()
 
-seir_model.init(1,epochs,s_pop_0,e_pop_0,i_pop_0,r_pop_0,beta,gamma,sigma)
-res = seir_model.run(0.1)
-seir_model.plot()
+def run_periods():
 
-beta = 2*gamma
-seir_model.init(58,11,res["Susceptible"].iloc[-1],res["Exposed"].iloc[-1],res["Infected"].iloc[-1],res["Resistant"].iloc[-1],beta)
-res = seir_model.run(0.1)
-seir_model.plot()
+    #first period
+    t0 = times[0]
+    tf = times[1]
+    R0 = R0_list[0]
+    beta = R0*gamma
+    seir_model.init(t0,tf,s_pop_0,e_pop_0,i_pop_0,r_pop_0,beta,gamma,sigma)
+    res = seir_model.run(0.1)
+    seir_model.plot()
 
-beta = 1*gamma
-seir_model.init(68,11,res["Susceptible"].iloc[-1],res["Exposed"].iloc[-1],res["Infected"].iloc[-1],res["Resistant"].iloc[-1],beta)
-res = seir_model.run(0.1)
-seir_model.plot()
+    #next period
+    for i in range(1,len(R0_list)):
+        R0 = R0_list[i]
+        beta = R0*gamma
+        t0 = times[i]
+        tf = times[i+1]
+        seir_model.init(t0, tf-t0+1, res["Susceptible"].iloc[-1], res["Exposed"].iloc[-1], res["Infected"].iloc[-1],
+                        res["Resistant"].iloc[-1], beta)
+        res = seir_model.run(0.1)
+        seir_model.plot()
 
-beta = 0.6*gamma
-seir_model.init(78,50,res["Susceptible"].iloc[-1],res["Exposed"].iloc[-1],res["Infected"].iloc[-1],res["Resistant"].iloc[-1],beta)
-res = seir_model.run(0.1)
-seir_model.plot()
+    seir_model.display("seir model","pop","days")
+    plt.show()
 
+run_periods()
+# def get_R0_by_gradient_descent
 
-
-seir_model.display("seir model","pop","days")
-
-plt.show()
+# epochs = 58
+#
+#
+#
+# beta = 2*gamma
+# seir_model.init(58,11,res["Susceptible"].iloc[-1],res["Exposed"].iloc[-1],res["Infected"].iloc[-1],res["Resistant"].iloc[-1],beta)
+# res = seir_model.run(0.1)
+# seir_model.plot()
+#
+# beta = 1*gamma
+# seir_model.init(68,11,res["Susceptible"].iloc[-1],res["Exposed"].iloc[-1],res["Infected"].iloc[-1],res["Resistant"].iloc[-1],beta)
+# res = seir_model.run(0.1)
+# seir_model.plot()
+#
+# beta = 0.6*gamma
+# seir_model.init(78,50,res["Susceptible"].iloc[-1],res["Exposed"].iloc[-1],res["Infected"].iloc[-1],res["Resistant"].iloc[-1],beta)
+# res = seir_model.run(0.1)
+# seir_model.plot()
+#
+#
+#
+# seir_model.display("seir model","pop","days")
+#
+# plt.show()
