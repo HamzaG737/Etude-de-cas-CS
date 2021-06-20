@@ -1,4 +1,4 @@
-# etude_de_cas
+# ETUDE DE CAS FILIERE RECHERCHE CENTRALESUPELEC
 
 This is the github repo for the use case study of the project 27 . The subject of this project is the tweets analysis for the prediction of covid propagation parameters.
 
